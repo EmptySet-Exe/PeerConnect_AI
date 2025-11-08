@@ -13,23 +13,38 @@ export default function ChatWindow()
         ]);
 
     // This sends the text to the "AI" (NeuralSeek)
-    const handleSend = (text) =>
+    const handleSend = async (text) =>
     {
         // Add user message
         const newMessages = [...messages, {sender: "user",text}];
         setMessages(newMessages);
 
-        // Simulates AI reply (NeuralSeek stub code)
-        setTimeout(
-            () => {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        sender: "ai",
-                        text: `Let's learn about: ${text}!`
-                    }
-                ]);
-            }, 1000);
+        // Connecting to the Backend server
+        try
+        {
+            const res = await fetch("http://localhost:3000/api/message",
+                {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({text})
+                }
+            );
+            
+            const data = await res.json();
+
+            setMessages((prev) => [...prev, {sender: "ai", text: data.reply}]);
+        }
+        catch(e)
+        {
+            console.error(e);
+            setMessages((prev) => [
+                ...prev,
+                {
+                    sender: "ai",
+                    text: "Server error. Try again later."
+                }
+            ]);
+        }  
     };
 
     const bottomRef = useRef(null);
