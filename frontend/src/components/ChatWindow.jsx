@@ -22,17 +22,29 @@ export default function ChatWindow()
         // Connecting to the Backend server
         try
         {
-            const res = await fetch("http://localhost:3000/api/message",
+            const res = await fetch("https://stagingapi.neuralseek.com/v1/stony41/seek",
                 {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({text})
+                    headers:
+                    {
+                        "accept": "application/json",
+                        "Content-Type": "application/json",
+                        "apikey": `${import.meta.env.VITE_NEURALSEEK_API_KEY}`
+                    },
+                    body: JSON.stringify(
+                        {
+                            question: text,
+                        }
+                    )
                 }
             );
+
+            if(!res.ok) throw new Error("API request failed!"); // Guard clause
             
             const data = await res.json();
+            const aiReply = data.answer || data.response || "I'm not sure how to help with that.";
 
-            setMessages((prev) => [...prev, {sender: "ai", text: data.reply}]);
+            setMessages((prev) => [...prev, {sender: "ai", text: aiReply}]);
         }
         catch(e)
         {
@@ -41,7 +53,7 @@ export default function ChatWindow()
                 ...prev,
                 {
                     sender: "ai",
-                    text: "Server error. Try again later."
+                    text: "Connection error. Try again later."
                 }
             ]);
         }  
@@ -57,7 +69,7 @@ export default function ChatWindow()
     return (
         <div className="flex flex-col h-[85vh] bg-gray-50 border rounded-2x1 shadow-lg overflow-hidden">
             <div className="flex-grow overflow-y-auto p-4">
-                // Why is this in a codeblock?
+                // Why is this in a codeblock? Chances are to return a non-standard value?
                 {
                     // What is this? This isn't an arrow function (?)
                     messages.map((msg,idx) => ( 
