@@ -1,9 +1,12 @@
 // main component
+import ChatWindow from "./components/ChatWindow"
+
 function App()
 {
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-900 text-white">
-      <h1 className="text-4x1 font-bold">PeerConnect AI</h1>
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-6">
+      <h1 className="text-3x1 font-bold mb-4">PeerConnect AI</h1>
+      <ChatWindow/>
     </div>
   );
 }
