@@ -5,6 +5,10 @@ import MessageInput from "./MessageInput";
 export default function ChatWindow()
 {
     const [mode, setMode] = useState("explain"); // Explain Mode(s)
+    const [subject,setSubject] = useState("Math");
+
+
+
 
     // Not entirely sure what's going on here (?)
     const [messages, setMessages] = useState ([
@@ -20,6 +24,8 @@ export default function ChatWindow()
         // Add user message
         const newMessages = [...messages, {sender: "user",text}];
         setMessages(newMessages);
+
+        const sendMsg = subject+" tutor: "+text;
 
         // Connecting to the Backend server
         try
@@ -37,16 +43,19 @@ export default function ChatWindow()
                     body: JSON.stringify(
                         {
                             // question: text, // This is just for the /seek LLM
-                            agent: "Basic_Tutor",
+                            // agent: "Basic_Tutor",
+                            agent: "Basic_Tutor_Adjusted",
                             params:
                             [
                                 {
                                     name: "persona",
                                     value: mode
+                                    // value: sendMsg
                                 },
                                 {
                                     name: "problem",
-                                    value: text
+                                    // value: text
+                                    value: sendMsg
                                 }
                             ]
                         })
@@ -83,9 +92,17 @@ export default function ChatWindow()
     // Sending html to the webpage
     return (
         <div className="flex flex-col h-[85vh] bg-gray-50 border rounded-2x1 shadow-lg overflow-hidden">
-            {
-
-            }
+            <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="p-2 border rounded-lg"
+                style={{color: 'black'}}                        // Sets the color of the input text
+            >
+                <option>Math</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>History</option>
+            </select>
             <div className="flex justify-center gap-2 p-3 bg-gray-100 border-b">
                 <button
                     onClick={()=> setMode("explain")}
