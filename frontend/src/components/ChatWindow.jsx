@@ -123,7 +123,7 @@ export default function ChatWindow()
                 </button>
             </div>
             <div className="flex-grow overflow-y-auto p-4">
-                // Why is this in a codeblock? Chances are to return a non-standard value?
+                { /* Why is this in a codeblock? Chances are to return a non-standard value? */}
                 {
                     // What is this? This isn't an arrow function (?)
                     messages.map((msg,idx) => ( 
@@ -135,9 +135,10 @@ export default function ChatWindow()
                         />
                     ))
                 }
-                <div ref={bottomRef}/> // This autoscrolls to the latest MessageBubble
+                { /* This autoscrolls to the latest MessageBubble */ }
+                <div ref={bottomRef}/> 
             </div>
-            // Sets handleSend function to the onSend argument for the MessageInput function
+            { /* Sets handleSend function to the onSend argument for the MessageInput function*/ }
             <MessageInput onSend={handleSend} />
         </div>
     );
